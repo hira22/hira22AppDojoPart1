@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var values: [String] = ["", "", "", "", ""]    
-    @State private var sum: Int = 0
-    
+    @State private var sum: Int?
+
     var body: some View {
         GeometryReader { geometry in
             
@@ -24,12 +24,12 @@ struct ContentView: View {
                 .frame(width: 100)
                 
                 Button("Button") {
-                    sum = values.reduce(0) { (result, value) in
-                        return result + (Int(value) ?? 0)
-                    }
+                    sum = values
+                        .map { Int($0) ?? 0 }
+                        .reduce(0, +)
                 }
                 
-                Text(sum > 0 ? String(sum) : "Label")
+                Text(sum.map { String($0) } ?? "Label")
                     .frame(width: 100, alignment: .leading)
             }
             .padding()
